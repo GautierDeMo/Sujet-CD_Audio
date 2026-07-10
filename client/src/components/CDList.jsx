@@ -24,7 +24,9 @@ const CDList = () => {
       <h2>Liste des CD 🎵</h2>
       <ul>
         {cds.length > 0 ? (
-          cds.map((cd) => <CDItem key={cd.id} cd={cd} onDelete={handleDelete} />)
+          cds.map((cd) => (
+            <CDItem key={cd.id} cd={cd} onDelete={handleDelete} />
+          ))
         ) : (
           <p>Aucun CD disponible</p>
         )}
@@ -33,4 +35,4 @@ const CDList = () => {
   );
 };
 
-export default CDList
+export default CDList;
