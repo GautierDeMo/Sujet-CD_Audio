@@ -5,6 +5,9 @@ const pool = require('../../configs/db')
 const meteora = { title: 'Meteora', artist: 'Linkin Park', year: '2003' }
 const chuck = { title: 'Chuck', artist: 'Sum 41', year: '2004' }
 
+/**
+ * @param {{ title: any; artist: any; year: any; }} cd
+ */
 async function insertCD(cd) {
   const result = await pool.query(
     'INSERT INTO cds (title, artist, year) VALUES ($1, $2, $3) RETURNING *',
