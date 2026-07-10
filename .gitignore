@@ -1,3 +1,4 @@
 # global
 node_modules
 .env
+coverage
