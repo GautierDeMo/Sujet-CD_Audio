@@ -1,6 +1,6 @@
 # Énoncé de l'examen – Environnement de Test
 
-### **Sujet : Tests d’une application de gestion de CD Audio**
+## **Sujet : Tests d’une application de gestion de CD Audio**
 
 Vous êtes chargé(e) d’écrire des tests pour une application web de gestion de CD Audio. L’application repose sur une architecture full-stack avec :
 
@@ -14,7 +14,7 @@ Vous êtes chargé(e) d’écrire des tests pour une application web de gestion 
 
 ---
 
-### **Travail demandé**
+## **Travail demandé**
 
 1. **Tests Unitaires** (Obligatoire)
    Implémentez des tests unitaires sur les éléments ou cela est possible.

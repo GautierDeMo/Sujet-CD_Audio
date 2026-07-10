@@ -1,21 +1,15 @@
-import PropTypes from "prop-types";
-
+/** @param {{ cd: CD, onDelete: (id: number) => void }} props */
 const CDItem = ({ cd, onDelete }) => {
   return (
     <li>
       <span>
         {cd.title} - {cd.artist} ({cd.year})
       </span>
-      <button className="delete-btn" onClick={() => onDelete(cd.id)}>
+      <button className="delete-btn" onClick={() => { onDelete(cd.id) } }>
         🗑 Supprimer
       </button>
     </li>
   );
-};
-
-CDItem.propTypes = {
-  cd: PropTypes.object.isRequired,
-  onDelete: PropTypes.func.isRequired,
 };
 
 export default CDItem;

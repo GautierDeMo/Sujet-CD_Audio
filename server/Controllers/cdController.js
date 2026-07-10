@@ -2,7 +2,7 @@ const pool = require("../configs/db")
 
 /** @type {import('express').RequestHandler} */
 // Récupérer tous les CD
-exports.getAllCDs = async (req, res) => {
+exports.getAllCDs = async (req, res, next) => {
   try {
     const result = await pool.query("SELECT * FROM cds ORDER BY id ASC")
     return res.json(result.rows)
@@ -13,7 +13,7 @@ exports.getAllCDs = async (req, res) => {
 
 /** @type {import('express').RequestHandler} */
 // Ajouter un CD
-exports.addCD = async (req, res) => {
+exports.addCD = async (req, res, next) => {
   const { title, artist, year } = req.body
   try {
     const result = await pool.query(
@@ -28,7 +28,7 @@ exports.addCD = async (req, res) => {
 
 /** @type {import('express').RequestHandler} */
 // Supprimer un CD
-exports.deleteCD = async (req, res) => {
+exports.deleteCD = async (req, res, next) => {
   const { id } = req.params
   try {
     await pool.query("DELETE FROM cds WHERE id = $1", [id])

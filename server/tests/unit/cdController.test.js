@@ -1,7 +1,8 @@
 jest.mock('../../configs/db', () => ({
   query: jest.fn(),
 }))
-const pool = require('../../configs/db')
+
+const pool = /** @type {{ query: jest.Mock }} */ (/** @type {unknown} */ (require('../../configs/db')))
 const { getAllCDs, addCD, deleteCD } = require('../../Controllers/cdController')
 
 const cds = [
@@ -58,23 +59,24 @@ const cds = [
 ]
 
 function createRes() {
-  return {
+  const res = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn(),
     send: jest.fn(),
   }
+  return /** @type {import('express').Response & typeof res} */ (/** @type {any} */ (res))
 }
 
 describe('getAllCDs() method', () => {
-  /** @type {import('express').Request} */
-  const req = {}
+
+  const req = /** @type {import('express').Request} */ (/** @type {any} */ ({}))
 
   it('should return the list of CDs', async () => {
 
     pool.query.mockResolvedValue({ rows: cds })
     const res = createRes()
 
-    await getAllCDs(req, res)
+    await getAllCDs(req, res, jest.fn())
 
     expect(pool.query).toHaveBeenCalledWith("SELECT * FROM cds ORDER BY id ASC")
     expect(res.json).toHaveBeenCalledWith(cds)
@@ -84,7 +86,7 @@ describe('getAllCDs() method', () => {
     pool.query.mockResolvedValue({ rows: [] })
     const res = createRes()
 
-    await getAllCDs(req, res)
+    await getAllCDs(req, res, jest.fn())
 
     expect(res.json).toHaveBeenCalledWith([])
   })
@@ -93,7 +95,7 @@ describe('getAllCDs() method', () => {
     pool.query.mockRejectedValue(new Error('DB down'))
     const res = createRes()
 
-    await getAllCDs(req, res)
+    await getAllCDs(req, res, jest.fn())
 
     expect(res.status).toHaveBeenCalledWith(500)
     expect(res.json).toHaveBeenCalledWith({ error: 'DB down' })
@@ -101,7 +103,7 @@ describe('getAllCDs() method', () => {
 })
 
 describe('addCD() method', () => {
-  const req = { body: cds[0] }
+  const req = /** @type {import('express').Request} */ (/** @type {any} */ ({ body: cds[0] }))
 
   it('should insert the CD and respond with 201 and the created CD', async () => {
 
@@ -109,7 +111,7 @@ describe('addCD() method', () => {
     pool.query.mockResolvedValue({ rows: [createdCD] })
     const res = createRes()
 
-    await addCD(req, res)
+    await addCD(req, res, jest.fn())
 
     expect(pool.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT'),
@@ -123,7 +125,7 @@ describe('addCD() method', () => {
     pool.query.mockRejectedValue(new Error('DB down'))
     const res = createRes()
 
-    await addCD(req, res)
+    await addCD(req, res, jest.fn())
 
     expect(res.status).toHaveBeenCalledWith(500)
     expect(res.json).toHaveBeenCalledWith({ error: 'DB down' })
@@ -131,14 +133,14 @@ describe('addCD() method', () => {
 })
 
 describe('deleteCD() method', () => {
-  const req = { params: { id: '1' } }
+  const req = /** @type {import('express').Request} */ (/** @type {any} */ ({ params: { id: '1' } }))
 
   it('should delete the CD and respond with 204', async () => {
 
-    pool.query.mockResolvedValue()
+    pool.query.mockResolvedValue(undefined)
     const res = createRes()
 
-    await deleteCD(req, res)
+    await deleteCD(req, res, jest.fn())
 
     expect(pool.query).toHaveBeenCalledWith(expect.stringContaining('DELETE'), ['1'])
     expect(res.status).toHaveBeenCalledWith(204)
@@ -149,7 +151,7 @@ describe('deleteCD() method', () => {
     pool.query.mockRejectedValue(new Error('DB down'))
     const res = createRes()
 
-    await deleteCD(req, res)
+    await deleteCD(req, res, jest.fn())
 
     expect(res.status).toHaveBeenCalledWith(500)
     expect(res.json).toHaveBeenCalledWith({ error: 'DB down' })

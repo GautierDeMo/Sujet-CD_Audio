@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "esnext",
     "lib": ["es2018", "dom"],
-    "types": ["cypress"]
+    "types": ["cypress"],
+    "checkJs": true,
   },
-  "include": ["**/*.js"]
+  "include": ["**/*.js"],
 }
