@@ -5,7 +5,7 @@ const chuck = { title: 'Chuck', artist: 'Sum 41', year: '2004' }
 
 beforeEach(() => {
   cy.request(API_URL).then(({ body }) => {
-    body.forEach((cd) => cy.request('DELETE', `${API_URL}/${cd.id}`))
+    body.forEach((/** @type {{ id: any; }} */ cd) => cy.request('DELETE', `${API_URL}/${cd.id}`))
   })
 })
 

@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { addCD } from "../services/cdService";
 
+/** @param {{ onAdd: () => void }} props */
 const AddCD = ({ onAdd }) => {
   const [form, setForm] = useState({ title: "", artist: "", year: "" });
 
+  /** @param {import("react").ChangeEvent<HTMLInputElement>} e */
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  /** @param {import("react").SubmitEvent<HTMLFormElement>} e */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title || !form.artist || !form.year) return;

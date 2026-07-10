@@ -3,7 +3,7 @@ import { getCDs, deleteCD } from "../services/cdService";
 import CDItem from "./CDItem";
 
 const CDList = () => {
-  const [cds, setCDs] = useState([]);
+  const [cds, setCDs] = useState(/** @type {Array<CD>} */ ([]));
 
   useEffect(() => {
     fetchCDs();
@@ -14,7 +14,7 @@ const CDList = () => {
     setCDs(data);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (/** @type {number} */ id) => {
     await deleteCD(id);
     fetchCDs(); // Rafraîchir la liste après suppression
   };
@@ -22,15 +22,15 @@ const CDList = () => {
   return (
     <div className="container">
       <h2>Liste des CD 🎵</h2>
-      <ul>
         {cds.length > 0 ? (
-          cds.map((cd) => (
-            <CDItem key={cd.id} cd={cd} onDelete={handleDelete} />
-          ))
+          <ul>
+            {cds.map((cd) => (
+              <CDItem key={cd.id} cd={cd} onDelete={handleDelete} />
+            ))}
+          </ul>
         ) : (
           <p>Aucun CD disponible</p>
         )}
-      </ul>
     </div>
   );
 };
