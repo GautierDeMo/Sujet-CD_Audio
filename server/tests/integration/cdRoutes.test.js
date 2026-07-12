@@ -25,14 +25,18 @@ async function insertCD(cd) {
 }
 
 beforeAll(async () => {
-  container = await new PostgreSqlContainer('postgres:latest').start()
+  container = await new PostgreSqlContainer('postgres:latest')
+    .withCopyFilesToContainer([{
+      source: path.join(__dirname, '../../configs/import.sql'),
+      target: '/docker-entrypoint-initdb.d/init_db.sql'
+    }])
+    .withName('cd_test')
+    .withDatabase('cd_database')
+    .start()
   process.env.URI_DB = container.getConnectionUri()
 
   pool = require('../../configs/db')
   app = require('../../server')
-
-  const schema = fs.readFileSync(path.join(__dirname, '../../configs/import.sql'), 'utf8')
-  await pool.query(schema)
 }, 60000)
 
 beforeEach(async () => {

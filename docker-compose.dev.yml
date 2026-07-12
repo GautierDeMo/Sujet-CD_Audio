@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:latest
     container_name: cd_db
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
