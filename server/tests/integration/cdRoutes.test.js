@@ -1,6 +1,14 @@
+const { PostgreSqlContainer } = require('@testcontainers/postgresql')
+const fs = require('node:fs')
+const path = require('node:path')
 const request = require('supertest')
-const app = require('../../server')
-const pool = require('../../configs/db')
+/** @type {import('pg').Pool} */
+let pool
+/** @type { import('express').Express } */
+let app
+/** @type { import('@testcontainers/postgresql').StartedPostgreSqlContainer } */
+let container
+
 
 const meteora = { title: 'Meteora', artist: 'Linkin Park', year: '2003' }
 const chuck = { title: 'Chuck', artist: 'Sum 41', year: '2004' }
@@ -16,13 +24,24 @@ async function insertCD(cd) {
   return result.rows[0]
 }
 
+beforeAll(async () => {
+  container = await new PostgreSqlContainer('postgres:latest').start()
+  process.env.URI_DB = container.getConnectionUri()
+
+  pool = require('../../configs/db')
+  app = require('../../server')
+
+  const schema = fs.readFileSync(path.join(__dirname, '../../configs/import.sql'), 'utf8')
+  await pool.query(schema)
+}, 60000)
+
 beforeEach(async () => {
-  await pool.query('DELETE FROM cds')
+  await pool.query('TRUNCATE TABLE cds RESTART IDENTITY')
 })
 
 afterAll(async () => {
-  await pool.query('DELETE FROM cds')
   await pool.end()
+  await container.stop()
 })
 
 describe('GET /api/cds', () => {
