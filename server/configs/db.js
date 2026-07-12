@@ -21,5 +21,4 @@ catch (e) {
   process.exit(1)
 }
 
-
 module.exports = pool
